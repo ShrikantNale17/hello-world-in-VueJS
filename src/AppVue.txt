@@ -1,0 +1,208 @@
+<div id="app">
+    <div>{{ greet }} {{ name }}</div>
+    <div v-text="channel"></div>
+    <div v-html="hack"></div>
+    <h3 :id="headingId">Vue JS</h3>
+    <button :disabled="isDisabled">Click me!</button>
+    <h2 class="underline">Underline text</h2>
+    <h2 class="underline" :class="status">Status</h2>
+    <h2 :class="isPromoted && 'promoted'">Promoted Movie</h2>
+    <h2 :class="!isSoldout ? 'sold-out' : 'new'">Soldout? movie</h2>
+    <h2 :class="['new', 'promoted']">Newly promoted movie</h2>
+    <h2 :class="[isPromoted && 'promoted', isSoldout ? 'sold-out' : 'new']">
+      Array conditional movie
+    </h2>
+    <h2
+      :class="{
+        promoted: isPromoted,
+        new: !isSoldout,
+        'sold-out': isSoldout,
+      }"
+    >
+      Object conditional movie
+    </h2>
+    <h2
+      :style="{
+        color: highlightcolor,
+        fontSize: headersize + 'px',
+        padding: '20px',
+      }"
+    >
+      Inline style
+    </h2>
+    <h2 :style="headerStyleObject">Style Object</h2>
+    <div :style="[baseStyleObject, successStyleObject]">Success Style</div>
+    <div :style="[baseStyleObject, dangerStyleObject]">Danger Style</div>
+
+    <!-- Conditional rendering -->
+    <h1 v-if="num === 0">The number is zero</h1>
+    <h2 v-else-if="num < 0">The number is negative</h2>
+    <h2 v-else-if="num > 0">The number is positive</h2>
+    <h2 v-else>Not a number</h2>
+    <template v-if="showElement">
+      <h2>Shrikant</h2>
+      <h2>Codevolution</h2>
+      <h2>Vue 3</h2>
+    </template>
+    <h2 v-show="showElement">Using v-show</h2>
+
+    <!-- List rendering -->
+    <h2 v-for="(name, index) in names" :key="name">{{ index }} {{ name }}</h2>
+    <h2 v-for="name in fullNames" :key="name.first">
+      {{ name.first }} {{ name.last }}
+    </h2>
+    <div v-for="actor in actors" :key="actor.name">
+      <h2>{{ actor.name }}</h2>
+      <h3 v-for="movie in actor.movies" :key="movie">{{ movie }}</h3>
+    </div>
+    <h2 v-for="(value, key, index) in myInfo" :key="value">
+      {{ index }} {{ key }} {{ value }}
+    </h2>
+    <template v-for="name in names">
+      <h2 :key="name">{{ name }}</h2>
+      <hr :key="name" />
+    </template>
+    <template v-for="name in names">
+      <h2 :key="name" v-if="name === 'Bruce'">{{ name }}</h2>
+    </template>
+
+    <!-- Methods -->
+    <h2>{{ 2 + 3 + 5 }}</h2>
+    <h2>{{ 5 + 10 + 15 }}</h2>
+    <h2>Add method - {{ add(2, 3, 5) }}</h2>
+    <h2>Add method - {{ add(5, 10, 15) }}</h2>
+    <h2>Multiply method - {{ multiply(10) }}</h2>
+    <h2>Multiply method - {{ multiply(baseValue) }}</h2>
+
+    <!-- Event handling -->
+    <h2>{{ name }}</h2>
+    <div>
+      <button v-on:click="changeName($event), increment(1, $event)">
+        Change name
+      </button>
+    </div>
+    <h2>{{ count }}</h2>
+    <div>
+      <button @click="increment(1, $event)">Increment</button>
+      <button @click="decrement(1, $event)">Decrement</button>
+      <button @click="increment(5, $event)">Increment 5</button>
+      <button @click="decrement(5, $event)">Decrement 5</button>
+    </div>
+  </div>
+
+
+  <script>
+export default {
+  name: "App",
+  data() {
+    return {
+      greet: "Hello",
+      name: "Shrikant",
+      channel: "Codevolution",
+      hack: '<a href="#" onclick="alert(`You have been hacked!`)">Win a prize!</a>',
+      headingId: "Id",
+      isDisabled: true,
+      status: "danger",
+      isPromoted: true,
+      isSoldout: true,
+      highlightcolor: "orange",
+      headersize: 50,
+      headerStyleObject: {
+        color: "orange",
+        fontSize: "50px",
+        padding: "20px",
+      },
+      baseStyleObject: {
+        fontSize: "50px",
+        padding: "10px",
+      },
+      successStyleObject: {
+        color: "green",
+        backgroundColor: "lightgreen",
+        border: "1px solid green",
+        padding: "20px",
+      },
+      dangerStyleObject: {
+        color: "darkred",
+        backgroundColor: "red",
+        border: "1px solid darkred",
+      },
+      num: 1,
+      showElement: false,
+      names: ["Bruce", "Clark", "Diana"],
+      fullNames: [
+        { first: "Bruce", last: "Wayne" },
+        { first: "Clark", last: "Kent" },
+        { first: "Princess", last: "Diana" },
+      ],
+      actors: [
+        {
+          name: "Christian Bale",
+          movies: ["Batman", "American Psycho"],
+        },
+        {
+          name: "Di Caprio",
+          movies: ["Titanic", "Inception"],
+        },
+      ],
+      myInfo: {
+        name: "Vishwas",
+        channel: "Codevolution",
+        course: "Vue 3",
+      },
+      baseMultiplier: 5,
+      baseValue: 2,
+      count: 0,
+    };
+  },
+
+  methods: {
+    add(a, b, c) {
+      return a + b + c;
+    },
+    multiply(num) {
+      return num * this.baseMultiplier;
+    },
+    increment(value, event) {
+      this.count += value;
+      console.log(event);
+    },
+    decrement(value, event) {
+      this.count -= value;
+      console.log(event);
+    },
+    changeName(event) {
+      this.name = "Bruce";
+      console.log(event);
+    },
+  },
+};
+</script>
+
+
+<style>
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+.promoted {
+  font-style: italic;
+}
+
+.sold-out {
+  color: red;
+}
+
+.new {
+  color: olivedrab;
+}
+</style>

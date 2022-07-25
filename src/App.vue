@@ -1,39 +1,25 @@
 <template>
   <div id="app">
-    <div>{{ greet }} {{ user }}</div>
-    <div v-text="channel"></div>
-    <div v-html="hack"></div>
-    <h3 :id="headingId">Vue JS</h3>
-    <button :disabled="isDisabled">Click me!</button>
-    <h2 class="underline">Underline text</h2>
-    <h2 class="underline" :class="status">Status</h2>
-    <h2 :class="isPromoted && 'promoted'">Promoted Movie</h2>
-    <h2 :class="!isSoldout ? 'sold-out' : 'new'">Soldout? movie</h2>
-    <h2 :class="['new', 'promoted']">Newly promoted movie</h2>
-    <h2 :class="[isPromoted && 'promoted', isSoldout ? 'sold-out' : 'new']">
-      Array conditional movie
+    <h2>Fullname - {{ firstName }} {{ lastName }}</h2>
+    <h2>Fullname - {{ fullName }}</h2>
+    <h2>Total - {{ items.reduce((total, curr) => total + curr.price, 0) }}</h2>
+    <h2>Computed total - {{ total }}</h2>
+    <h2>Method total - {{ getTotal() }}</h2>
+    <button @click="items.push({ id: 4, title: 'Keyboard', price: 50 })">
+      Add item
+    </button>
+    <div>
+      <input type="text" v-model="country" />
+    </div>
+    <template v-for="item in items">
+      <h2 :key="item.id" v-if="item.id === 1">
+        {{ item.title }} - {{ item.price }}
+      </h2>
+    </template>
+    <h2 v-for="item in expensiveItems" :key="item.id">
+      {{ item.title }} - {{ item.price }}
     </h2>
-    <h2
-      :class="{
-        promoted: isPromoted,
-        new: !isSoldout,
-        'sold-out': isSoldout,
-      }"
-    >
-      Object conditional movie
-    </h2>
-    <h2
-      :style="{
-        color: highlightcolor,
-        fontSize: headersize + 'px',
-        padding: '20px',
-      }"
-    >
-      Inline style
-    </h2>
-    <h2 :style="headerStyleObject">Style Object</h2>
-    <div :style="[baseStyleObject, successStyleObject]">Success Style</div>
-    <div :style="[baseStyleObject, dangerStyleObject]">Danger Style</div>
+    <button @click="changeFullName">Change name</button>
   </div>
 </template>
 
@@ -42,38 +28,60 @@ export default {
   name: "App",
   data() {
     return {
-      greet: "Hello",
-      user: "Shrikant",
-      channel: "Codevolution",
-      hack: '<a href="#" onclick="alert(`You have been hacked!`)">Win a prize!</a>',
-      headingId: "Id",
-      isDisabled: true,
-      status: "danger",
-      isPromoted: true,
-      isSoldout: true,
-      highlightcolor: "orange",
-      headersize: 50,
-      headerStyleObject: {
-        color: "orange",
-        fontSize: "50px",
-        padding: "20px",
-      },
-      baseStyleObject: {
-        fontSize: "50px",
-        padding: "10px",
-      },
-      successStyleObject: {
-        color: "green",
-        backgroundColor: "lightgreen",
-        border: "1px solid green",
-        padding: "20px",
-      },
-      dangerStyleObject: {
-        color: "darkred",
-        backgroundColor: "red",
-        border: "1px solid darkred",
-      },
+      firstName: "Bruce",
+      lastName: "Wayne",
+      items: [
+        {
+          id: 1,
+          title: "TV",
+          price: 100,
+        },
+        {
+          id: 2,
+          title: "Phone",
+          price: 200,
+        },
+        {
+          id: 3,
+          title: "Laptop",
+          price: 300,
+        },
+      ],
+      country: "",
     };
+  },
+
+  methods: {
+    getTotal() {
+      console.log("getTotal");
+      return this.items.reduce((total, curr) => total + curr.price, 0);
+    },
+    changeFullName() {
+      this.fullName = "Clark Kent";
+    },
+  },
+
+  computed: {
+    // fullName() {
+    //   return `${this.firstName} ${this.lastName}`;
+    // },
+    fullName: {
+      get() {
+        return `${this.firstName} ${this.lastName}`;
+      },
+      set(value) {
+        const name = value.split(" ");
+        this.firstName = name[0];
+        this.lastName = name[1];
+      },
+    },
+    total() {
+      console.log("computed total");
+      return this.items.reduce((total, curr) => total + curr.price, 0);
+    },
+    expensiveItems() {
+      return this.items.filter((item) => item.price > 100);
+    },
   },
 };
 </script>
@@ -83,24 +91,8 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  /* text-align: center; */
   color: #2c3e50;
   margin-top: 60px;
-}
-
-.underline {
-  text-decoration: underline;
-}
-
-.promoted {
-  font-style: italic;
-}
-
-.sold-out {
-  color: red;
-}
-
-.new {
-  color: olivedrab;
 }
 </style>
